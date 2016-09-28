@@ -20,6 +20,8 @@ import java.awt.image.BufferedImage;
  * */
 public class TetrisBotGameWindowFinder {
 	
+	private static final boolean DEBUG_MSG_ON = false;
+	
 	/** @return the location and size of the game window as a Rectangle if the game has been found, otherwise null.*/
 	public Rectangle getGameWindowLocation(){
 		try{
@@ -32,13 +34,22 @@ public class TetrisBotGameWindowFinder {
             //System.out.println((new Color(screen.getRGB(10, 160))).toString());
             //robot.mouseMove(10, 160);
             
-            Point p = getGameWindowSideCoordinates(screen);
+            Point p = getGameWindowSideCoordinates(screen, true);
+            boolean extendedSearch = false;
+            if(p == null){
+            	//The game window wasn't found, using extended (no so precise) search
+            	if(DEBUG_MSG_ON) System.out.println("Window not found, using extended search");
+            	extendedSearch = true;
+            	p = getGameWindowSideCoordinates(screen, false);
+            }
+            
             if(p == null){
             	//The game window wasn't found
             	return null;
             }else{
             	//The game window was found, now get the exact boundaries of it
-            	Rectangle r = getGameWindowRectangle(screen, p);
+            	Rectangle r = getGameWindowRectangle(screen, p, extendedSearch);
+            	if(DEBUG_MSG_ON) System.out.println("Found a game window: " + r);
             	return r;
             }
 		}catch(AWTException e){
@@ -47,8 +58,9 @@ public class TetrisBotGameWindowFinder {
 		return null;
 	}
 	
-	/** @Return a point that has the coordinates to a point on the right side of the game screen or null if the game window wasn't found */
-	private Point getGameWindowSideCoordinates(BufferedImage screen){
+	/**@param reliableResults it this is set to true the program is only able to find the game in the menu screen, but false-positives are very unlikely 
+	 * @Return a point that has the coordinates to a point on the right side of the game screen or null if the game window wasn't found */
+	private Point getGameWindowSideCoordinates(BufferedImage screen, boolean reliableResults){
 		//Only check one pixel in every 100 pixels to speed up the processing
         boolean hasFoundNonWhitePixels = false;
         for (int y = 0; y < screen.getHeight(); y+=10) {
@@ -61,55 +73,78 @@ public class TetrisBotGameWindowFinder {
                 		boolean failed = true;
                 		int testx = x;
                 		
-                		//move left: if correct, we should see a black-ish pixel
-                		for(int i = 0; i < 11; i++){
-                			testx--;
-                			if((new Color(screen.getRGB(testx, y))).equals(new Color(0, 51, 102))){
-                				failed = false;
-                				break;
+                		if(reliableResults){
+	                		//move left: if correct, we should see a black-ish pixel
+	                		for(int i = 0; i < 11; i++){
+	                			testx--;
+	                			if((new Color(screen.getRGB(testx, y))).equals(new Color(0, 51, 102))){
+	                				failed = false;
+	                				break;
+	                			}
+	                		}
+	                		
+	                		if(failed){
+	                			hasFoundNonWhitePixels = false;
+	                		}else{
+	                			//Testing even further: move left: if correct, we should see a blue pixel
+	                			failed = true;
+	                    		for(int i = 0; i < 5; i++){
+	                    			testx--;
+	                    			if((new Color(screen.getRGB(testx, y))).equals(new Color(151, 197, 240))){
+	                    				failed = false;
+	                    				break;
+	                    			}
+	                    		}
+	                    		
+	                    		if(failed){
+	                    			hasFoundNonWhitePixels = false;
+	                    		}else{
+	                    			//And the final test: move left: if correct, we should see a black-ish pixel
+	                    			failed = true;
+	                        		for(int i = 0; i < 8; i++){
+	                        			testx--;
+	                        			if((new Color(screen.getRGB(testx, y))).equals(new Color(0, 51, 102))){
+	                        				failed = false;
+	                        				break;
+	                        			}
+	                        		}
+	                        		
+	                        		if(failed){
+	                        			hasFoundNonWhitePixels = false;
+	                        		}else{
+	                        			//The point has been found!
+	                        			testx = x;
+	                            		for(int i = 0; i < 11; i++){
+	                            			testx--;
+	                            			if((new Color(screen.getRGB(testx, y))).equals(new Color(0, 51, 102))){
+	                            				break;
+	                            			}
+	                            		}
+	                            		return new Point(testx, y);
+	                        		}
+	                    		}
                 			}
-                		}
-                		
-                		if(failed){
-                			hasFoundNonWhitePixels = false;
                 		}else{
-                			//Testing even further: move left: if correct, we should see a blue pixel
-                			failed = true;
-                    		for(int i = 0; i < 5; i++){
-                    			testx--;
-                    			if((new Color(screen.getRGB(testx, y))).equals(new Color(151, 197, 240))){
-                    				failed = false;
-                    				break;
-                    			}
-                    		}
-                    		
-                    		if(failed){
-                    			hasFoundNonWhitePixels = false;
-                    		}else{
-                    			//And the final test: move left: if correct, we should see a black-ish pixel
-                    			failed = true;
-                        		for(int i = 0; i < 8; i++){
-                        			testx--;
-                        			if((new Color(screen.getRGB(testx, y))).equals(new Color(0, 51, 102))){
-                        				failed = false;
-                        				break;
-                        			}
-                        		}
-                        		
-                        		if(failed){
-                        			hasFoundNonWhitePixels = false;
-                        		}else{
-                        			//The point has been found!
-                        			testx = x;
-                            		for(int i = 0; i < 11; i++){
-                            			testx--;
-                            			if((new Color(screen.getRGB(testx, y))).equals(new Color(0, 51, 102))){
-                            				break;
-                            			}
-                            		}
-                            		return new Point(testx, y);
-                        		}
-                    		}
+                			//move left: if correct, we should see a black pixel
+	                		for(int i = 0; i < 11; i++){
+	                			testx--;
+	                			if((new Color(screen.getRGB(testx, y))).equals(new Color(0, 0, 0))){
+	                				failed = false;
+	                				break;
+	                			}
+	                		}
+	                		
+	                		if(failed){
+	                			hasFoundNonWhitePixels = false;
+	                		}else{
+	            				//As the results don't need to be very reliable, we have skipped some checks
+	            				Rectangle r = getGameWindowRectangle(screen, new Point(testx, y), true);
+	            				if(DEBUG_MSG_ON) System.out.println("Testing: " + r);
+	            				if(r != null  &&  r.width > 700  &&  r.width < 800  &&  r.height > 650  &&  r.height < 750){
+	            					//Should be the correct location
+	            					return new Point(testx, y);
+	            				}
+	                		}
                 		}
                 	}
                 }else{
@@ -126,34 +161,39 @@ public class TetrisBotGameWindowFinder {
 	/**
 	 * @param screen a screenshot of the user's screen
 	 * @param point a point that is on the right border of the game window 
-	 * @return the Rectangle that surrounds the game on the screen */
-	private Rectangle getGameWindowRectangle(BufferedImage screen, Point point){
+	 * @return the Rectangle that surrounds the game on the screen or null if an error occurres*/
+	private Rectangle getGameWindowRectangle(BufferedImage screen, Point point, boolean realBlack){
+		Color colorOfBlack = realBlack? new Color(0, 0, 0): new Color(0, 51, 102);
 		int bottom_y, top_y, left_x, right_x;
 		
 		right_x = point.x;
-				
-		int y = point.y;
-		int x = point.x;
-		while(new Color(screen.getRGB(point.x, y)).equals(new Color(0, 51, 102))){
+		
+		try{
+			int y = point.y;
+			int x = point.x;
+			while(new Color(screen.getRGB(point.x, y)).equals(colorOfBlack)){
+				y--;
+			}
+			y++;
+			top_y = y;
+			while(new Color(screen.getRGB(point.x, y)).equals(colorOfBlack)){
+				while(new Color(screen.getRGB(point.x, y)).equals(colorOfBlack)){
+					y++;
+				}
+				if(new Color(screen.getRGB(point.x, y+30)).equals(colorOfBlack)){
+					y += 30;
+				}
+			}
 			y--;
-		}
-		y++;
-		top_y = y;
-		while(new Color(screen.getRGB(point.x, y)).equals(new Color(0, 51, 102))){
-			while(new Color(screen.getRGB(point.x, y)).equals(new Color(0, 51, 102))){
-				y++;
+			bottom_y = y;
+			while(new Color(screen.getRGB(x, y)).equals(colorOfBlack)){
+				x--;
 			}
-			if(new Color(screen.getRGB(point.x, y+30)).equals(new Color(0, 51, 102))){
-				y += 30;
-			}
+			x++;
+			left_x = x;
+			return new Rectangle(left_x, top_y, right_x - left_x, bottom_y - top_y);
+		}catch(ArrayIndexOutOfBoundsException e){
+			return null;
 		}
-		y--;
-		bottom_y = y;
-		while(new Color(screen.getRGB(x, y)).equals(new Color(0, 51, 102))){
-			x--;
-		}
-		x++;
-		left_x = x;
-		return new Rectangle(left_x, top_y, right_x - left_x, bottom_y - top_y);
 	}
 }

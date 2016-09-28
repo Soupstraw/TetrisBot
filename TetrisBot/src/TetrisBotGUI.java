@@ -1,27 +1,55 @@
-import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JWindow;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-public class TetrisBotGUI extends JFrame{
+public class TetrisBotGUI extends JWindow{
 	
 	/** For some reason this is needed for JFrame to function correctly */
 	private static final long serialVersionUID = 5459532085525547128L;
-	private JPanel panel = new TetrisBotGUIPanel();
+	public static final int LEFT_SIDEBAR_WIDTH = 10;
+	public static final int TOP_SIDEBAR_HEIGHT = 50;
+	public static final int BOTTOM_SIDEBAR_HEIGHT = 10;
+	public static final int RIGHT_SIDEBAR_WIDTH = 300;
+	private TetrisBotGUIPanel panel = new TetrisBotGUIPanel();
 	
 	public TetrisBotGUI() {
-		setTitle("TetrisBot v0.1 [Made by Jürgen, Karl and Joosep]");
+		
 		setSize(500, 300);
 		setLocationRelativeTo(null);
+		setAlwaysOnTop(true);
+		setBackground(new Color(0,0,0,0));
+        setContentPane(new TetrisBotGUIPanel());
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		add(panel, BorderLayout.CENTER);
+		
+		addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	panel.onClick(e.getX(), e.getY());
+            }
+        });
 		
 		new Thread(){
 			public void run() {
-				//this infinite loop is automatically exited when the JFrame is closed
+				//this infinite loop is automatically exited when the JWindow is closed
 				while(true){
-					panel.repaint();
+					repaint();
 					try {sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 				}
 			};
@@ -29,7 +57,14 @@ public class TetrisBotGUI extends JFrame{
 	}
 	
 	public void setStatusMessage(String msg){
-		((TetrisBotGUIPanel) panel).setStatusMessage(msg);
+		panel.setStatusMessage(msg);
+		System.out.println(msg);
+	}
+	
+	public void setLocationRectangle(Rectangle location){
+		setLocation(location.x-LEFT_SIDEBAR_WIDTH, location.y-TOP_SIDEBAR_HEIGHT);
+		setSize(location.width + LEFT_SIDEBAR_WIDTH + RIGHT_SIDEBAR_WIDTH, location.height + TOP_SIDEBAR_HEIGHT + BOTTOM_SIDEBAR_HEIGHT);
+		panel.setLocationRectangle(location);
 	}
 	
 }
