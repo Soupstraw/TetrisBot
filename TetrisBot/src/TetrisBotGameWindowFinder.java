@@ -1,5 +1,7 @@
 import java.awt.AWTException;
 import java.awt.Color;
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -28,11 +30,8 @@ public class TetrisBotGameWindowFinder {
 			Robot robot = new Robot();
 			
 			//Get a screenshow of the screen
-			Rectangle maxWindow = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+			Rectangle maxWindow = getMaximumWindowSize();
             final BufferedImage screen = robot.createScreenCapture(maxWindow);
-            
-            //System.out.println((new Color(screen.getRGB(10, 160))).toString());
-            //robot.mouseMove(10, 160);
             
             Point p = getGameWindowSideCoordinates(screen, true);
             boolean extendedSearch = false;
@@ -56,6 +55,21 @@ public class TetrisBotGameWindowFinder {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	private Rectangle getMaximumWindowSize(){
+		int width = 0;
+		int height = 0;
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice[] gs = ge.getScreenDevices();
+		for (GraphicsDevice curGs : gs)
+		{
+		  DisplayMode mode = curGs.getDisplayMode();
+		  width += mode.getWidth();
+		  height = mode.getHeight();
+		}
+		
+		return new Rectangle(0, 0, width, height);
 	}
 	
 	/**@param reliableResults it this is set to true the program is only able to find the game in the menu screen, but false-positives are very unlikely 
@@ -176,11 +190,11 @@ public class TetrisBotGameWindowFinder {
 			}
 			y++;
 			top_y = y;
-			while(new Color(screen.getRGB(point.x, y)).equals(colorOfBlack)){
-				while(new Color(screen.getRGB(point.x, y)).equals(colorOfBlack)){
+			while(y < screen.getHeight()  &&  new Color(screen.getRGB(point.x, y)).equals(colorOfBlack)){
+				while(y < screen.getHeight()  &&  new Color(screen.getRGB(point.x, y)).equals(colorOfBlack)){
 					y++;
 				}
-				if(new Color(screen.getRGB(point.x, y+30)).equals(colorOfBlack)){
+				if(y + 30 < screen.getHeight()  &&  new Color(screen.getRGB(point.x, y+30)).equals(colorOfBlack)){
 					y += 30;
 				}
 			}
@@ -193,6 +207,7 @@ public class TetrisBotGameWindowFinder {
 			left_x = x;
 			return new Rectangle(left_x, top_y, right_x - left_x, bottom_y - top_y);
 		}catch(ArrayIndexOutOfBoundsException e){
+			e.printStackTrace();
 			return null;
 		}
 	}

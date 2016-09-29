@@ -1,6 +1,4 @@
-import java.awt.AWTException;
 import java.awt.Rectangle;
-import java.awt.Robot;
 
 
 public class TetrisBotMain {
@@ -23,15 +21,8 @@ public class TetrisBotMain {
 			gui.setStatusMessage("Game window not found!");
 		}else{
 			//Overlay the game with the GUI
-			gui.setStatusMessage("Window found");
-			System.out.println(game.toString());
+			gui.setStatusMessage("Window found");	
 			gui.setLocationRectangle(game);
-			try {
-				//move the mouse to the lower-right corner
-				new Robot().mouseMove(game.x + game.width, game.y+game.height);
-			} catch (AWTException e) {
-				e.printStackTrace();
-			}
 		}
 		
 	}
