@@ -87,8 +87,22 @@ public class TetrisBotGUIPanel extends JPanel{
             //Draw status information
             g2d.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 15));
             g2d.drawString("Color at (" + mx + ";" + my + "): (" + c.getRed() + "; " + c.getGreen() + "; " + c.getBlue() + ")", sidebarX, 70);
-            g2d.drawString("Status: " + statusMessage, sidebarX, 100);
-            g2d.drawString("AI: Stopped", sidebarX, 130);
+            g2d.drawString("Color at (" + (mx - locationRectangle.x) + ";" + (my-locationRectangle.y) + "): (" + c.getRed() + "; " + c.getGreen() + "; " + c.getBlue() + ")", sidebarX, 100);
+            g2d.drawString("Status: " + statusMessage, sidebarX, 130);
+            g2d.drawString("AI: Stopped", sidebarX, 160);
+            
+            g2d.setColor(Color.WHITE);
+            //draw debug information
+            for(int x = 0; x < 10; x++){
+            	for(int y = 0; y < 20; y++){
+            		int xpos = 92 + 9 + x*18 + TetrisBotGUI.LEFT_SIDEBAR_WIDTH;
+            		int ypos = 152 + 9 + y*18 + TetrisBotGUI.TOP_SIDEBAR_HEIGHT;
+            		
+            		g2d.drawRect(xpos-1, ypos-1, 2, 2);
+            		
+            	}
+            }
+            
         }
     }
 	
