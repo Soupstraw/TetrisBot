@@ -1,5 +1,5 @@
 
-public class TetrisBotBoardReckognition {
+public class TetrisBotBoardRecognition {
 	/**
 	 * Kui mäng ei ole veel alanud, on iga ruudu värviks igas punktis (47;47;47)
 	 * Esimene ruut (94;152) (ülemine-vasak nurk)
