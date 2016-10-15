@@ -12,4 +12,12 @@ public class TetrisBotBoardRecognition {
 	 * 
 	 * 
 	 * */
+	
+	public TetrisBotBoardRecognition() {
+		
+	}
+	
+	public void loadGameImage(){
+		
+	}
 }

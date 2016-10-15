@@ -96,7 +96,7 @@ public class TetrisBotGUIPanel extends JPanel{
             for(int x = 0; x < 10; x++){
             	for(int y = 0; y < 20; y++){
             		int xpos = 92 + 9 + x*18 + TetrisBotGUI.LEFT_SIDEBAR_WIDTH;
-            		int ypos = 152 + 9 + y*18 + TetrisBotGUI.TOP_SIDEBAR_HEIGHT;
+            		int ypos = 152 + 10 + y*18 + TetrisBotGUI.TOP_SIDEBAR_HEIGHT;
             		
             		g2d.drawRect(xpos-1, ypos-1, 2, 2);
             		
