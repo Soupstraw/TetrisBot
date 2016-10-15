@@ -16,17 +16,20 @@ public class TetrisBotGUIPanel extends JPanel{
 	/** For some reason this is needed for JPanel to work */
 	private static final long serialVersionUID = -8712841791705290046L;
 	private Robot robot;
-	private static String statusMessage = "Default Status Message";
-	private static Rectangle locationRectangle;
-	private static String windowTitle = "TetrisBot v0.1 [Made by Jürgen, Karl and Joosep]";
+	private String statusMessage = "Default Status Message";
+	private Rectangle locationRectangle;
+	private String windowTitle = "TetrisBot v0.1 [Made by Jürgen, Karl and Joosep]";
+	private TetrisBotMain main;
 	
-	public TetrisBotGUIPanel() {
+	
+	public TetrisBotGUIPanel(TetrisBotMain main) {
 		setOpaque(false);
 		try {
 			robot = new Robot();
 		} catch (AWTException e) {
 			e.printStackTrace();
 		}
+		this.main = main;
 	}
 	
 	public void setLocationRectangle(Rectangle rectangle){
@@ -104,6 +107,7 @@ public class TetrisBotGUIPanel extends JPanel{
             }
             
         }
+        main.rec.drawDebugInformation(g2d);
     }
 	
 	public void setStatusMessage(String msg){
@@ -113,6 +117,10 @@ public class TetrisBotGUIPanel extends JPanel{
 	public void onClick(int x, int y){
 		if(locationRectangle == null  ||  y < 40 && x > TetrisBotGUI.LEFT_SIDEBAR_WIDTH + TetrisBotGUI.RIGHT_SIDEBAR_WIDTH + locationRectangle.width - 40){
 			System.exit(0);
+		}
+		
+		if(locationRectangle != null  &&  y > 40 && y < 80 && x > TetrisBotGUI.LEFT_SIDEBAR_WIDTH + TetrisBotGUI.RIGHT_SIDEBAR_WIDTH + locationRectangle.width - 40){
+			main.rec.analyzeGameState();
 		}
 	}
 	

@@ -207,7 +207,8 @@ public class TetrisBotGameWindowFinder {
 			left_x = x;
 			return new Rectangle(left_x, top_y, right_x - left_x, bottom_y - top_y);
 		}catch(ArrayIndexOutOfBoundsException e){
-			e.printStackTrace();
+			//no need to see this, these exceptions are handled separately
+			//e.printStackTrace();
 			return null;
 		}
 	}
