@@ -1,4 +1,5 @@
 <keymap version="1" name="Default copy" parent="$default">
+  <action id="CollapseRegionRecursively" />
   <action id="GotoCustomRegion" />
   <action id="SwitchApply">
     <keyboard-shortcut first-keystroke="shift alt enter" />
