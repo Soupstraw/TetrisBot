@@ -14,15 +14,18 @@ public class TetrisBotGUI extends JWindow{
 	public static final int TOP_SIDEBAR_HEIGHT = 50;
 	public static final int BOTTOM_SIDEBAR_HEIGHT = 10;
 	public static final int RIGHT_SIDEBAR_WIDTH = 300;
-	private TetrisBotGUIPanel panel = new TetrisBotGUIPanel();
+	private TetrisBotGUIPanel panel;
+	private TetrisBotMain main;
 	
-	public TetrisBotGUI() {
+	public TetrisBotGUI(TetrisBotMain main) {
+		this.main = main;
+		panel = new TetrisBotGUIPanel(main);
 		
 		setSize(500, 300);
 		setLocationRelativeTo(null);
 		setAlwaysOnTop(true);
 		setBackground(new Color(0,0,0,0));
-        setContentPane(new TetrisBotGUIPanel());
+        setContentPane(panel);
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -49,6 +52,7 @@ public class TetrisBotGUI extends JWindow{
 			public void run() {
 				//this infinite loop is automatically exited when the JWindow is closed
 				while(true){
+					TetrisBotGUI.this.main.rec.analyzeGameState();
 					repaint();
 					try {sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 				}

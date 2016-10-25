@@ -3,8 +3,13 @@ import java.awt.Rectangle;
 
 public class TetrisBotMain {
 	
+	TetrisBotBoardRecognition rec;
+	
 	public static void main(String args[]){
-		
+		new TetrisBotMain();
+	}
+	
+	public TetrisBotMain(){
 		/**
 		 * 		OPEN THIS IN BROWSER: https://apps.facebook.com/tetris_battle
 		 * */
@@ -12,9 +17,10 @@ public class TetrisBotMain {
 		//Find the game
 		TetrisBotGameWindowFinder windowFinder = new TetrisBotGameWindowFinder();
 		Rectangle game = windowFinder.getGameWindowLocation();
+		rec = new TetrisBotBoardRecognition(game);
 		
 		//Create the GUI
-		TetrisBotGUI gui = new TetrisBotGUI();
+		TetrisBotGUI gui = new TetrisBotGUI(this);
 				
 		//Do something reasonable
 		if(game == null){
@@ -24,6 +30,5 @@ public class TetrisBotMain {
 			gui.setStatusMessage("Window found");	
 			gui.setLocationRectangle(game);
 		}
-		
 	}
 }
