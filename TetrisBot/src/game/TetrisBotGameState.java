@@ -93,7 +93,7 @@ public class TetrisBotGameState {
         for(int x = 0; x < BOARD_WIDTH; x++){
             int height = 0;
             for(int y = 0; y < BOARD_HEIGHT; y++){
-                if(board.getBlock(x, y){
+                if(board.getBlock(x, y)){
                     height = y;
                 }
             }

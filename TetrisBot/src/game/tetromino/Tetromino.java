@@ -8,7 +8,7 @@ public class Tetromino {
 
     private int[][] matrix;
 
-    private Tetromino(int[][] matrix){
+    Tetromino(int[][] matrix){
         this.matrix = matrix;
     }
 
