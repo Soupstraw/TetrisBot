@@ -4,12 +4,15 @@ package game.tetromino;
  * Created by Joosep on 06-Oct-16.
  */
 
-public class Tetromino {
+public class Tetromino extends Object{
 
     private int[][] matrix;
+    private int x, y;
 
     Tetromino(int[][] matrix){
         this.matrix = matrix;
+        setX(0);
+        setY(0);
     }
 
     public final void rotateClockwise(){
@@ -23,11 +26,20 @@ public class Tetromino {
 
         matrix = newMatrix;
     }
-
+    
+    public void moveRight(){
+    	x++;
+    }
+    
+    public void moveLeft(){
+    	x--;
+    }
+    
     public int getBlock(int x, int y){
         return matrix[x][y];
     }
 
+    // Returns tetromino matrix
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for(int y = 0; y < matrix[0].length; y++){
@@ -38,4 +50,35 @@ public class Tetromino {
         }
         return sb.toString();
     }
+    
+    public int getWidth(){
+    	return matrix.length;
+    }
+    
+    public int getHeight(){
+    	return matrix[0].length;
+    }
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+	
+	public Tetromino clone(){
+		Tetromino tet = new Tetromino(matrix.clone());
+		tet.setX(x);
+		tet.setY(y);
+		return tet;
+	}
 }

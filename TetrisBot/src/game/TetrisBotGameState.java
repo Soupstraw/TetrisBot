@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import game.tetromino.Tetromino;
 
 /**
@@ -7,16 +9,16 @@ import game.tetromino.Tetromino;
  */
 public class TetrisBotGameState {
 
-    // Board dimensions
-    private static final int BOARD_WIDTH = 10;
-    private static final int BOARD_HEIGHT = 20;
-
     // Rating multipliers for game state factors
     private static final float SMOOTHNESS_RATING_MULTIPLIER = 1.0f;
     private static final float ROWS_RATING_MULTIPLIER = 1.0f;
     private static final float HOLES_RATING_MULTIPLIER = -1.0f;
 
     private class GameBoard {
+    	
+    	// Board dimensions
+        private static final int BOARD_WIDTH = 10;
+        private static final int BOARD_HEIGHT = 20;
 
         private boolean[][] board;
 
@@ -35,6 +37,14 @@ public class TetrisBotGameState {
         public void setBlock(int x, int y, boolean val) {
             board[x][y] = val;
         }
+        
+        public int getWidth(){
+        	return BOARD_WIDTH;
+        }
+        
+        public int getHeight(){
+        	return BOARD_HEIGHT;
+        }
     }
 
     private GameBoard board;
@@ -44,6 +54,35 @@ public class TetrisBotGameState {
 
     public TetrisBotGameState(){
 
+    }
+    
+    // Try every possible move using commands left, right, rotate and fastdrop
+    public ArrayList<BotCommand> findBestMoves(){
+    	Tetromino testTetromino = currentTetromino.clone();
+    	
+    	ArrayList<BotCommand> bestSequence = null;
+    	
+    	for(int r = 0; r < 4; r++){
+    		ArrayList<BotCommand> moves = new ArrayList<>();
+    		// Add 1 - 4 rotation commands and rotate test tetromino
+    		for(int i = 0; i < r; i++){
+    			moves.add(BotCommand.ROTATE);
+    			testTetromino.rotateClockwise();
+    		}
+    		
+    		// Drop from all possible x coordinates
+    		for(int x = -testTetromino.getWidth(); x < board.getWidth(); x++){
+    			// Add x move right commands and move test tetromino
+        		for(int i = 0; i < x; i++){
+        			moves.add(BotCommand.RIGHT);
+        			testTetromino.moveRight();
+        		}
+        		// Use fast drop for now
+        		moves.add(BotCommand.FAST_DROP);
+        	}
+    	}
+    	
+    	return bestSequence;
     }
 
     public Tetromino getCurrentTetromino() {
