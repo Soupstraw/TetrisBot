@@ -21,8 +21,13 @@ public class TetrisBotGameState {
     	this.board = new GameBoard();
     }
     
+    public TetrisBotGameState(GameBoard gameBoard, Tetromino tetromino){
+    	this.board = gameBoard;
+    	this.currentTetromino = tetromino;
+    }
+    
     // Try every possible move using commands left, right, rotate and fastdrop
-    protected ArrayList<BotCommand> findBestMove(){
+    public ArrayList<BotCommand> findBestMove(){
     	
     	ArrayList<BotCommand> bestSequence = null;
     	float bestScore = Float.NEGATIVE_INFINITY;
@@ -149,5 +154,9 @@ public class TetrisBotGameState {
 
 	public GameBoard getBoard() {
 		return board;
+	}
+	
+	public void setBoard(GameBoard board){
+		this.board = board;
 	}
 }
