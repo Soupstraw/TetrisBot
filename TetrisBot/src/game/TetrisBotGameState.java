@@ -45,6 +45,21 @@ public class TetrisBotGameState {
         public int getHeight(){
         	return BOARD_HEIGHT;
         }
+        
+        public String toString(){
+        	StringBuilder sb = new StringBuilder();
+        	for(int y = 0; y < BOARD_HEIGHT; y++){
+        		for(int x = 0; x < BOARD_WIDTH; x++){
+        			if(board[x][y]){
+        				sb.append("X");
+        			}else{
+        				sb.append(".");
+        			}
+        		}
+        		sb.append("\n");
+        	}
+        	return sb.toString();
+        }
     }
 
     private GameBoard board;
@@ -93,6 +108,7 @@ public class TetrisBotGameState {
         this.currentTetromino = currentTetromino;
     }
 
+    // Will probably not be used
     public Tetromino getNextTetromino() {
         return nextTetromino;
     }
@@ -104,9 +120,9 @@ public class TetrisBotGameState {
     public float calculateBoardRating(){
         // Count how many empty blocks are covered by at least one filled block
         int holes = 0;
-        for(int x = 0; x < BOARD_WIDTH; x++){
+        for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
             boolean covered = false;
-            for(int y = BOARD_HEIGHT - 1; y >= 0; y--){
+            for(int y = GameBoard.BOARD_HEIGHT - 1; y >= 0; y--){
                 if(board.getBlock(x, y) == true){
                     covered = true;
                 }else if(covered){
@@ -117,9 +133,9 @@ public class TetrisBotGameState {
 
         // Count the number of filled rows
         int rows = 0;
-        for(int y = 0; y < BOARD_HEIGHT; y++){
+        for(int y = 0; y < GameBoard.BOARD_HEIGHT; y++){
             rows++;
-            for(int x = 0; x < BOARD_WIDTH; x++){
+            for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
                 if(!board.getBlock(x, y)){
                     rows--;
                     break;
@@ -128,10 +144,10 @@ public class TetrisBotGameState {
         }
 
         // Generate a histogram for column heights
-        int[] histogram = new int[BOARD_WIDTH];
-        for(int x = 0; x < BOARD_WIDTH; x++){
+        int[] histogram = new int[GameBoard.BOARD_WIDTH];
+        for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
             int height = 0;
-            for(int y = 0; y < BOARD_HEIGHT; y++){
+            for(int y = 0; y < GameBoard.BOARD_HEIGHT; y++){
                 if(board.getBlock(x, y)){
                     height = y;
                 }
@@ -141,7 +157,7 @@ public class TetrisBotGameState {
 
         // Calculate the smoothness of the histogram
         float smoothness = 0;
-        for(int x = 0; x < BOARD_WIDTH; x++){
+        for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
             float sum = 0;
             int n = 1;
             int height = histogram[x];
@@ -149,7 +165,7 @@ public class TetrisBotGameState {
                 n++;
                 sum += Math.abs(height - histogram[x-1]);
             }
-            if(x < BOARD_WIDTH - 1){
+            if(x < GameBoard.BOARD_WIDTH - 1){
                 n++;
                 sum += Math.abs(height - histogram[x+1]);
             }

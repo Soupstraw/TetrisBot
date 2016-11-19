@@ -9,10 +9,10 @@ public class Tetromino extends Object{
     private int[][] matrix;
     private int x, y;
 
-    Tetromino(int[][] matrix){
+    protected Tetromino(int[][] matrix, int x, int y){
         this.matrix = matrix;
-        setX(0);
-        setY(0);
+        setX(x);
+        setY(y);
     }
 
     public final void rotateClockwise(){
@@ -76,7 +76,7 @@ public class Tetromino extends Object{
 	}
 	
 	public Tetromino clone(){
-		Tetromino tet = new Tetromino(matrix.clone());
+		Tetromino tet = new Tetromino(matrix.clone(), x, y);
 		tet.setX(x);
 		tet.setY(y);
 		return tet;
