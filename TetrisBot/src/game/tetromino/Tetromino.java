@@ -35,6 +35,14 @@ public class Tetromino extends Object{
     	x--;
     }
     
+    public void moveDown(){
+    	y++;
+    }
+    
+    public void moveUp(){
+    	y--;
+    }
+    
     public int getBlock(int x, int y){
         return matrix[x][y];
     }

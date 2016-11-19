@@ -14,55 +14,6 @@ public class TetrisBotGameState {
     private static final float ROWS_RATING_MULTIPLIER = 1.0f;
     private static final float HOLES_RATING_MULTIPLIER = -1.0f;
 
-    private class GameBoard {
-    	
-    	// Board dimensions
-        private static final int BOARD_WIDTH = 10;
-        private static final int BOARD_HEIGHT = 20;
-
-        private boolean[][] board;
-
-        public GameBoard() {
-            board = new boolean[BOARD_WIDTH][BOARD_HEIGHT];
-        }
-
-        public boolean getBlock(int x, int y) {
-        	if(x < 0 || x >= BOARD_WIDTH || y >= BOARD_HEIGHT){
-        		return true;
-        	}else if(y < 0){
-        		return false;
-        	}
-            return board[x][y];
-        }
-
-        public void setBlock(int x, int y, boolean val) {
-            board[x][y] = val;
-        }
-        
-        public int getWidth(){
-        	return BOARD_WIDTH;
-        }
-        
-        public int getHeight(){
-        	return BOARD_HEIGHT;
-        }
-        
-        public String toString(){
-        	StringBuilder sb = new StringBuilder();
-        	for(int y = 0; y < BOARD_HEIGHT; y++){
-        		for(int x = 0; x < BOARD_WIDTH; x++){
-        			if(board[x][y]){
-        				sb.append("X");
-        			}else{
-        				sb.append(".");
-        			}
-        		}
-        		sb.append("\n");
-        	}
-        	return sb.toString();
-        }
-    }
-
     private GameBoard board;
 
     private Tetromino currentTetromino;
@@ -76,6 +27,7 @@ public class TetrisBotGameState {
     	Tetromino testTetromino = currentTetromino.clone();
     	
     	ArrayList<BotCommand> bestSequence = null;
+    	float bestScore = Float.NEGATIVE_INFINITY;
     	
     	for(int r = 0; r < 4; r++){
     		ArrayList<BotCommand> moves = new ArrayList<>();
@@ -92,8 +44,13 @@ public class TetrisBotGameState {
         			moves.add(BotCommand.RIGHT);
         			testTetromino.moveRight();
         		}
-        		// Use fast drop for now
-        		moves.add(BotCommand.FAST_DROP);
+        		
+        		// Test whether block collides with anything
+        		if(!checkTetrominoCollision(testTetromino)){
+	        		// Use fast drop for now
+	        		moves.add(BotCommand.FAST_DROP);
+	        		fastDrop(testTetromino);
+        		}
         	}
     	}
     	
@@ -189,6 +146,13 @@ public class TetrisBotGameState {
     			}
     		}
     	}
+    }
+    
+    protected void fastDrop(Tetromino tet){
+    	while(!checkTetrominoCollision(tet)){
+    		tet.moveDown();
+    	}
+    	tet.moveUp();
     }
 
 	public GameBoard getBoard() {
