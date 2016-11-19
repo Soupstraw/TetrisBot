@@ -21,10 +21,14 @@ public class TetrisBotGameTest {
         System.out.println(t);
         
         // Check collision
-        System.out.println(gameState.checkTetrominoCollision(t));
+        System.out.println(gameState.getBoard().checkTetrominoCollision(t));
         
         // Print the board with tetromino
-        gameState.freezeTetromino(t);
+        gameState.getBoard().fastDrop(t);
+        gameState.getBoard().freezeTetromino(t);
         System.out.println(gameState.getBoard());
+        
+        gameState.setCurrentTetromino(tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_4x1));
+        gameState.findBestMove().forEach((BotCommand c) -> System.out.println(c));
     }
 }
