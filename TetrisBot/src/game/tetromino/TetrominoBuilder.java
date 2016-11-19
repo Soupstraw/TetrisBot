@@ -35,7 +35,7 @@ public class TetrominoBuilder {
                         {1, 1}
                 },
                 4,
-                0
+                -1
                 );
             case T_S:
                 return new Tetromino(new int[][]{
@@ -44,7 +44,7 @@ public class TetrominoBuilder {
                         {1, 0}
                 },
                 3,
-                0
+                -1
                 );
             case T_Z:
                 return new Tetromino(new int[][]{
@@ -53,7 +53,7 @@ public class TetrominoBuilder {
                         {0, 1}
                 },
                 3,
-                0
+                -1
                 );
             case T_L:
                 return new Tetromino(new int[][]{
@@ -62,7 +62,7 @@ public class TetrominoBuilder {
                         {1, 1}
                 },
                 3,
-                0
+                -1
                 );
             case T_J:
                 return new Tetromino(new int[][]{
@@ -71,7 +71,7 @@ public class TetrominoBuilder {
                         {0, 1}
                 },
                 3,
-                0
+                -1
                 );
             case T_T:
                 return new Tetromino(new int[][]{
@@ -80,7 +80,7 @@ public class TetrominoBuilder {
                         {0, 1}
                 },
                 3,
-                0
+                -1
                 );
         }
         return null;
