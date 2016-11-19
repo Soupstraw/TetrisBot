@@ -68,7 +68,7 @@ public class TetrisBotGameState {
     private Tetromino nextTetromino;
 
     public TetrisBotGameState(){
-
+    	this.setBoard(new GameBoard());
     }
     
     // Try every possible move using commands left, right, rotate and fastdrop
@@ -86,7 +86,7 @@ public class TetrisBotGameState {
     		}
     		
     		// Drop from all possible x coordinates
-    		for(int x = -testTetromino.getWidth(); x < board.getWidth(); x++){
+    		for(int x = -testTetromino.getWidth(); x < getBoard().getWidth(); x++){
     			// Add x move right commands and move test tetromino
         		for(int i = 0; i < x; i++){
         			moves.add(BotCommand.RIGHT);
@@ -123,7 +123,7 @@ public class TetrisBotGameState {
         for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
             boolean covered = false;
             for(int y = GameBoard.BOARD_HEIGHT - 1; y >= 0; y--){
-                if(board.getBlock(x, y) == true){
+                if(getBoard().getBlock(x, y) == true){
                     covered = true;
                 }else if(covered){
                     holes++;
@@ -136,7 +136,7 @@ public class TetrisBotGameState {
         for(int y = 0; y < GameBoard.BOARD_HEIGHT; y++){
             rows++;
             for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
-                if(!board.getBlock(x, y)){
+                if(!getBoard().getBlock(x, y)){
                     rows--;
                     break;
                 }
@@ -148,7 +148,7 @@ public class TetrisBotGameState {
         for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
             int height = 0;
             for(int y = 0; y < GameBoard.BOARD_HEIGHT; y++){
-                if(board.getBlock(x, y)){
+                if(getBoard().getBlock(x, y)){
                     height = y;
                 }
             }
@@ -178,7 +178,7 @@ public class TetrisBotGameState {
     public boolean checkTetrominoCollision(Tetromino tet){
     	for(int i = 0; i < tet.getWidth(); i++){
     		for(int j = 0; j < tet.getHeight(); j++){
-    			if(tet.getBlock(i, j) == 1 && board.getBlock(i + tet.getX(), j + tet.getY())){
+    			if(tet.getBlock(i, j) == 1 && getBoard().getBlock(i + tet.getX(), j + tet.getY())){
     				return true;
     			}
     		}
@@ -190,9 +190,17 @@ public class TetrisBotGameState {
     	for(int i = 0; i < tet.getWidth(); i++){
     		for(int j = 0; j < tet.getHeight(); j++){
     			if(tet.getBlock(i, j) == 1){
-    				board.setBlock(i + tet.getX(), j + tet.getY(), true);
+    				getBoard().setBlock(i + tet.getX(), j + tet.getY(), true);
     			}
     		}
     	}
     }
+
+	public GameBoard getBoard() {
+		return board;
+	}
+
+	public void setBoard(GameBoard board) {
+		this.board = board;
+	}
 }

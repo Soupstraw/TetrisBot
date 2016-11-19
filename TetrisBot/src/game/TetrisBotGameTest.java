@@ -21,6 +21,7 @@ public class TetrisBotGameTest {
         System.out.println(t);
         
         // Print the block on board
-        gameState.setCurrentTetromino(t);
+        gameState.freezeTetromino(t);
+        System.out.println(gameState.getBoard());
     }
 }
