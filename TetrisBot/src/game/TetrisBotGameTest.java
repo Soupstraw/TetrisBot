@@ -13,7 +13,7 @@ public class TetrisBotGameTest {
     	
         TetrominoBuilder tb = new TetrominoBuilder();
 
-        Tetromino t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_J);	// Change the parameter to test for different tetrominos
+        Tetromino t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_2x2);	// Change the parameter to test for different tetrominos
         System.out.println(t);
 
         // Test rotation
@@ -32,7 +32,8 @@ public class TetrisBotGameTest {
         gameState.findBestMove().forEach((BotCommand c) -> System.out.println(c));
         
         t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_4x1);
-        t.rotateClockwise();
+        t.moveLeft();
+        t.moveLeft();
         t.moveLeft();
         gameState.getBoard().fastDrop(t);
         gameState.getBoard().freezeTetromino(t);

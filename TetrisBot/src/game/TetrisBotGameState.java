@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import game.tetromino.Tetromino;
 
@@ -10,9 +11,11 @@ import game.tetromino.Tetromino;
 public class TetrisBotGameState {
 
     // Rating multipliers for game state factors
-    private static final float SMOOTHNESS_RATING_MULTIPLIER = -1.0f;
-    private static final float ROWS_RATING_MULTIPLIER = 1.0f;
-    private static final float HOLES_RATING_MULTIPLIER = -10.0f;
+	// Parameters taken from https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/
+    private static final float ROUGHNESS_RATING_MULTIPLIER = -0.18f;
+    private static final float ROWS_RATING_MULTIPLIER = 0.76f;
+    private static final float HOLES_RATING_MULTIPLIER = -0.36f;
+    private static final float AGGREGATE_HEIGHT_RATING_MULTIPLIER = -0.51f;
 
     private GameBoard board;
     private Tetromino currentTetromino;
@@ -124,32 +127,31 @@ public class TetrisBotGameState {
         int[] histogram = new int[GameBoard.BOARD_WIDTH];
         for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
             int height = 0;
-            for(int y = 0; y < GameBoard.BOARD_HEIGHT; y++){
+            for(int y = GameBoard.BOARD_HEIGHT - 1; y >= 0; y--){
                 if(gb.getBlock(x, y)){
-                    height = y;
+                    height = GameBoard.BOARD_HEIGHT - y;
                 }
             }
             histogram[x] = height;
         }
 
-        // Calculate the smoothness of the histogram
-        float smoothness = 0;
-        for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
-            float sum = 0;
-            int n = 1;
-            int height = histogram[x];
-            if(x > 0){
-                n++;
-                sum += Math.abs(height - histogram[x-1]);
-            }
-            if(x < GameBoard.BOARD_WIDTH - 1){
-                n++;
-                sum += Math.abs(height - histogram[x+1]);
-            }
-            smoothness += sum / n;
+        // Calculate the roughness of the histogram
+        float roughness = 0;
+        for(int x = 1; x < GameBoard.BOARD_WIDTH; x++){
+            roughness += Math.abs(histogram[x] - histogram[x-1]);
+        }
+        
+        // Calculate aggregate height of the board
+        float height = 0;
+        for(int i = 0; i < histogram.length; i++){
+        	height += histogram[i];
         }
 
-        return smoothness * SMOOTHNESS_RATING_MULTIPLIER + rows * ROWS_RATING_MULTIPLIER + holes * HOLES_RATING_MULTIPLIER;
+        return 
+        		roughness * ROUGHNESS_RATING_MULTIPLIER + 
+        		rows * ROWS_RATING_MULTIPLIER + 
+        		holes * HOLES_RATING_MULTIPLIER + 
+        		height * AGGREGATE_HEIGHT_RATING_MULTIPLIER;
     }
 
 	public GameBoard getBoard() {
