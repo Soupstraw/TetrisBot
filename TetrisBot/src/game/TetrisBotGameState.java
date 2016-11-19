@@ -27,7 +27,7 @@ public class TetrisBotGameState {
         }
 
         public boolean getBlock(int x, int y) {
-        	if(0 <= x && x >= BOARD_WIDTH || y >= BOARD_HEIGHT){
+        	if(x < 0 || x >= BOARD_WIDTH || y >= BOARD_HEIGHT){
         		return true;
         	}else if(y < 0){
         		return false;
@@ -181,7 +181,11 @@ public class TetrisBotGameState {
     	for(int i = 0; i < tet.getWidth(); i++){
     		for(int j = 0; j < tet.getHeight(); j++){
     			if(tet.getBlock(i, j) == 1){
-    				getBoard().setBlock(i + tet.getX(), j + tet.getY(), true);
+    				try{
+    					getBoard().setBlock(i + tet.getX(), j + tet.getY(), true);
+    				}catch(ArrayIndexOutOfBoundsException ex){
+    					// Ignore, we don't need to worry about it
+    				}
     			}
     		}
     	}
