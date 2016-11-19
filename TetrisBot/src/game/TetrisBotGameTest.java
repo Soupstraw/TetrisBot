@@ -30,5 +30,12 @@ public class TetrisBotGameTest {
         
         gameState.setCurrentTetromino(tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_4x1));
         gameState.findBestMove().forEach((BotCommand c) -> System.out.println(c));
+        
+        t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_4x1);
+        t.rotateClockwise();
+        t.moveLeft();
+        gameState.getBoard().fastDrop(t);
+        gameState.getBoard().freezeTetromino(t);
+        System.out.println(gameState.getBoard());
     }
 }

@@ -10,9 +10,9 @@ import game.tetromino.Tetromino;
 public class TetrisBotGameState {
 
     // Rating multipliers for game state factors
-    private static final float SMOOTHNESS_RATING_MULTIPLIER = 1.0f;
+    private static final float SMOOTHNESS_RATING_MULTIPLIER = -1.0f;
     private static final float ROWS_RATING_MULTIPLIER = 1.0f;
-    private static final float HOLES_RATING_MULTIPLIER = -1.0f;
+    private static final float HOLES_RATING_MULTIPLIER = -10.0f;
 
     private GameBoard board;
     private Tetromino currentTetromino;
