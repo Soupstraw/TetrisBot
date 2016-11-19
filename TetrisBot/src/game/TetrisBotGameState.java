@@ -174,4 +174,25 @@ public class TetrisBotGameState {
 
         return smoothness * SMOOTHNESS_RATING_MULTIPLIER + rows * ROWS_RATING_MULTIPLIER + holes * HOLES_RATING_MULTIPLIER;
     }
+    
+    public boolean checkTetrominoCollision(Tetromino tet){
+    	for(int i = 0; i < tet.getWidth(); i++){
+    		for(int j = 0; j < tet.getHeight(); j++){
+    			if(tet.getBlock(i, j) == 1 && board.getBlock(i + tet.getX(), j + tet.getY())){
+    				return true;
+    			}
+    		}
+    	}
+    	return false;
+    }
+    
+    public void freezeTetromino(Tetromino tet){
+    	for(int i = 0; i < tet.getWidth(); i++){
+    		for(int j = 0; j < tet.getHeight(); j++){
+    			if(tet.getBlock(i, j) == 1){
+    				board.setBlock(i + tet.getX(), j + tet.getY(), true);
+    			}
+    		}
+    	}
+    }
 }

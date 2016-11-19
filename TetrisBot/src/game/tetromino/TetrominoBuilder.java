@@ -15,7 +15,7 @@ public class TetrominoBuilder {
         T_T
     }
 
-    public Tetromino getTetromino(TetrominoShape shape) {
+    public Tetromino buildTetromino(TetrominoShape shape) {
         switch (shape) {
             case T_4x1:
                 return new Tetromino(new int[][]{

@@ -9,13 +9,18 @@ import game.tetromino.TetrominoBuilder;
 public class TetrisBotGameTest {
     public static void main(String[] args){
 
+    	TetrisBotGameState gameState = new TetrisBotGameState();
+    	
         TetrominoBuilder tb = new TetrominoBuilder();
 
-        Tetromino t = tb.getTetromino(TetrominoBuilder.TetrominoShape.T_J);
+        Tetromino t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_J);
         System.out.println(t);
 
         // Test rotation
         t.rotateClockwise();
         System.out.println(t);
+        
+        // Print the block on board
+        gameState.setCurrentTetromino(t);
     }
 }
