@@ -20,6 +20,9 @@ public class TetrisBotGameTest {
         t.rotateClockwise();
         System.out.println(t);
         
+        // Check collision
+        System.out.println(gameState.checkTetrominoCollision(t));
+        
         // Print the board with tetromino
         gameState.freezeTetromino(t);
         System.out.println(gameState.getBoard());

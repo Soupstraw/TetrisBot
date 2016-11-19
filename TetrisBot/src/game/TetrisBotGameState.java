@@ -27,11 +27,12 @@ public class TetrisBotGameState {
         }
 
         public boolean getBlock(int x, int y) {
-            try {
-                return board[x][y];
-            } catch(ArrayIndexOutOfBoundsException ex) {
-                return true;
-            }
+        	if(0 <= x && x >= BOARD_WIDTH || y >= BOARD_HEIGHT){
+        		return true;
+        	}else if(y < 0){
+        		return false;
+        	}
+            return board[x][y];
         }
 
         public void setBlock(int x, int y, boolean val) {
@@ -65,14 +66,13 @@ public class TetrisBotGameState {
     private GameBoard board;
 
     private Tetromino currentTetromino;
-    private Tetromino nextTetromino;
 
     public TetrisBotGameState(){
-    	this.setBoard(new GameBoard());
+    	this.board = new GameBoard();
     }
     
     // Try every possible move using commands left, right, rotate and fastdrop
-    public ArrayList<BotCommand> findBestMoves(){
+    public ArrayList<BotCommand> findBestMove(){
     	Tetromino testTetromino = currentTetromino.clone();
     	
     	ArrayList<BotCommand> bestSequence = null;
@@ -108,16 +108,7 @@ public class TetrisBotGameState {
         this.currentTetromino = currentTetromino;
     }
 
-    // Will probably not be used
-    public Tetromino getNextTetromino() {
-        return nextTetromino;
-    }
-
-    public void setNextTetromino(Tetromino nextTetromino) {
-        this.nextTetromino = nextTetromino;
-    }
-
-    public float calculateBoardRating(){
+    private float calculateBoardRating(){
         // Count how many empty blocks are covered by at least one filled block
         int holes = 0;
         for(int x = 0; x < GameBoard.BOARD_WIDTH; x++){
@@ -175,7 +166,7 @@ public class TetrisBotGameState {
         return smoothness * SMOOTHNESS_RATING_MULTIPLIER + rows * ROWS_RATING_MULTIPLIER + holes * HOLES_RATING_MULTIPLIER;
     }
     
-    public boolean checkTetrominoCollision(Tetromino tet){
+    protected boolean checkTetrominoCollision(Tetromino tet){
     	for(int i = 0; i < tet.getWidth(); i++){
     		for(int j = 0; j < tet.getHeight(); j++){
     			if(tet.getBlock(i, j) == 1 && getBoard().getBlock(i + tet.getX(), j + tet.getY())){
@@ -186,7 +177,7 @@ public class TetrisBotGameState {
     	return false;
     }
     
-    public void freezeTetromino(Tetromino tet){
+    protected void freezeTetromino(Tetromino tet){
     	for(int i = 0; i < tet.getWidth(); i++){
     		for(int j = 0; j < tet.getHeight(); j++){
     			if(tet.getBlock(i, j) == 1){
@@ -198,9 +189,5 @@ public class TetrisBotGameState {
 
 	public GameBoard getBoard() {
 		return board;
-	}
-
-	public void setBoard(GameBoard board) {
-		this.board = board;
 	}
 }
