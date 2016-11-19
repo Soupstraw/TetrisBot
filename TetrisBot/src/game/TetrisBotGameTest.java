@@ -13,14 +13,14 @@ public class TetrisBotGameTest {
     	
         TetrominoBuilder tb = new TetrominoBuilder();
 
-        Tetromino t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_J);
+        Tetromino t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_J);	// Change the parameter to test for different tetrominos
         System.out.println(t);
 
         // Test rotation
         t.rotateClockwise();
         System.out.println(t);
         
-        // Print the block on board
+        // Print the board with tetromino
         gameState.freezeTetromino(t);
         System.out.println(gameState.getBoard());
     }
