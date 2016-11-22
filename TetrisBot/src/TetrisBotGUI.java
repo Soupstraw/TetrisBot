@@ -2,9 +2,12 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JWindow;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import game.GameBoard;
 
 public class TetrisBotGUI extends JWindow{
 	
@@ -53,6 +56,18 @@ public class TetrisBotGUI extends JWindow{
 				//this infinite loop is automatically exited when the JWindow is closed
 				while(true){
 					TetrisBotGUI.this.main.rec.analyzeGameState();
+					if(TetrisBotGUI.this.main.rec.getGameState() == TetrisBotBoardRecognition.GameState.GAME_ONGOING){
+						int[][] brd = TetrisBotGUI.this.main.rec.getBoardData();
+						GameBoard gb = new GameBoard();
+						for(int x = 0; x < gb.getWidth(); x++){
+							for(int y = 0; y < gb.getHeight(); y++){
+								gb.setBlock(x, y, brd[x][y] > 0);
+							}
+						}
+						
+						System.out.println("GameBoard: " + gb);
+						
+					}
 					repaint();
 					try {sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 				}

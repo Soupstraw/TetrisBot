@@ -18,7 +18,7 @@ public class TetrisBotGUIPanel extends JPanel{
 	private Robot robot;
 	private String statusMessage = "Default Status Message";
 	private Rectangle locationRectangle;
-	private String windowTitle = "TetrisBot v0.1 [Made by Jürgen, Karl and Joosep]";
+	private String windowTitle = "TetrisBot v0.9 [Made by Jürgen, Karl and Joosep]";
 	private TetrisBotMain main;
 	
 	

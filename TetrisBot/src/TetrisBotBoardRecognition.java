@@ -142,8 +142,8 @@ public class TetrisBotBoardRecognition {
 	        	}
 	        }
 		}
-		if(undefined > 10*10){
-			//Over 50% of blocks are not recognized, probably in an unknown state
+		if(undefined > 2*10){
+			//Over 10% of blocks are not recognized, probably in an unknown state
 			currentGameState = GameState.UNKNOWN;
 			System.out.println("Jump to unknown!");
 		}
