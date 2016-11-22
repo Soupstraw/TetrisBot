@@ -108,25 +108,25 @@ public class TetrisBotBoardRecognition {
 	        			decodedBoard[x][y] = 0;
 	        		}else if(c.equals(new Color(124, 212, 36))){
 	        			//this is a green block
-	        			decodedBoard[x][y] = 1;
+	        			decodedBoard[x][y] = 11;
 	        		}else if(c.equals(new Color(255, 194, 37))){
 	        			//this is a yellow block
-	        			decodedBoard[x][y] = 1;
+	        			decodedBoard[x][y] = 12;
 	        		}else if(c.equals(new Color(255, 126, 37))){
 	        			//this is a orange block
-	        			decodedBoard[x][y] = 1;
+	        			decodedBoard[x][y] = 13;
 	        		}else if(c.equals(new Color(250, 50, 90))){
 	        			//this is a red/purple block
-	        			decodedBoard[x][y] = 1;
+	        			decodedBoard[x][y] = 14;
 	        		}else if(c.equals(new Color(210, 76, 173))){
 	        			//this is a violet block
-	        			decodedBoard[x][y] = 1;
+	        			decodedBoard[x][y] = 15;
 	        		}else if(c.equals(new Color(50, 190, 250))){
 	        			//this is a light-blue block
-	        			decodedBoard[x][y] = 1;
+	        			decodedBoard[x][y] = 16;
 	        		}else if(c.equals(new Color(68, 100, 233))){
 	        			//this is a dark-blue block
-	        			decodedBoard[x][y] = 1;
+	        			decodedBoard[x][y] = 17;
 	        		}else if(c.equals(new Color(188, 188, 188))){
 	        			//this is concrete
 	        			decodedBoard[x][y] = 2;
@@ -145,7 +145,6 @@ public class TetrisBotBoardRecognition {
 		if(undefined > 2*10){
 			//Over 10% of blocks are not recognized, probably in an unknown state
 			currentGameState = GameState.UNKNOWN;
-			System.out.println("Jump to unknown!");
 		}
 	}
 	

@@ -17,7 +17,7 @@ public class TetrisBotGUI extends JWindow{
 	public static final int TOP_SIDEBAR_HEIGHT = 50;
 	public static final int BOTTOM_SIDEBAR_HEIGHT = 10;
 	public static final int RIGHT_SIDEBAR_WIDTH = 300;
-	private TetrisBotGUIPanel panel;
+	TetrisBotGUIPanel panel;
 	private TetrisBotMain main;
 	
 	public TetrisBotGUI(TetrisBotMain main) {
@@ -50,29 +50,6 @@ public class TetrisBotGUI extends JWindow{
             	panel.onClick(e.getX(), e.getY());
             }
         });
-		
-		new Thread(){
-			public void run() {
-				//this infinite loop is automatically exited when the JWindow is closed
-				while(true){
-					TetrisBotGUI.this.main.rec.analyzeGameState();
-					if(TetrisBotGUI.this.main.rec.getGameState() == TetrisBotBoardRecognition.GameState.GAME_ONGOING){
-						int[][] brd = TetrisBotGUI.this.main.rec.getBoardData();
-						GameBoard gb = new GameBoard();
-						for(int x = 0; x < gb.getWidth(); x++){
-							for(int y = 0; y < gb.getHeight(); y++){
-								gb.setBlock(x, y, brd[x][y] > 0);
-							}
-						}
-						
-						System.out.println("GameBoard: " + gb);
-						
-					}
-					repaint();
-					try {sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
-				}
-			};
-		}.start();
 	}
 	
 	public void setStatusMessage(String msg){

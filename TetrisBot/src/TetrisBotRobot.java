@@ -2,6 +2,8 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
+import game.BotCommand;
+
 public class TetrisBotRobot {
 	Robot robot;
 	
@@ -14,10 +16,14 @@ public class TetrisBotRobot {
 	}
 	
 	public void tapKey(int keyEvent){
+		System.out.println("KeyEvent: " + keyEvent);
 		robot.keyPress(keyEvent);
+		try{
+			Thread.sleep(50);
+		} catch (InterruptedException e) {}
 		robot.keyRelease(keyEvent);
 		try{
-			Thread.sleep(5);
+			Thread.sleep(250);
 		} catch (InterruptedException e) {}
 	}
 	
@@ -35,5 +41,22 @@ public class TetrisBotRobot {
 	
 	public void drop(){
 		tapKey(KeyEvent.VK_SPACE);
+	}
+	
+	public void doCommand(BotCommand command){
+		switch(command){
+		case LEFT:
+			left();
+			break;
+		case RIGHT:
+			right();
+			break;
+		case ROTATE:
+			rotate();
+			break;
+		case FAST_DROP:
+			drop();
+			break;
+		}
 	}
 }

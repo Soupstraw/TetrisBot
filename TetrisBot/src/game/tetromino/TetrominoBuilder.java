@@ -17,7 +17,7 @@ public class TetrominoBuilder {
 
     // TODO: edit tetromino spawns so that they match BattleTetris spawns
     // You can use TetrisBotGameTest class to print the board with any tetromino
-    public Tetromino buildTetromino(TetrominoShape shape) {
+    public static Tetromino buildTetromino(TetrominoShape shape) {
         switch (shape) {
             case T_4x1:
                 return new Tetromino(new int[][]{
