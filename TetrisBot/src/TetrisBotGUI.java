@@ -7,8 +7,6 @@ import javax.swing.JWindow;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import game.GameBoard;
-
 public class TetrisBotGUI extends JWindow{
 	
 	/** For some reason this is needed for JFrame to function correctly */
@@ -18,10 +16,10 @@ public class TetrisBotGUI extends JWindow{
 	public static final int BOTTOM_SIDEBAR_HEIGHT = 10;
 	public static final int RIGHT_SIDEBAR_WIDTH = 300;
 	TetrisBotGUIPanel panel;
-	private TetrisBotMain main;
+	//private TetrisBotMain main;
 	
 	public TetrisBotGUI(TetrisBotMain main) {
-		this.main = main;
+		//this.main = main;
 		panel = new TetrisBotGUIPanel(main);
 		
 		setSize(500, 300);

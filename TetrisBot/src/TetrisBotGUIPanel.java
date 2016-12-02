@@ -20,6 +20,7 @@ public class TetrisBotGUIPanel extends JPanel{
 	private Rectangle locationRectangle;
 	private String windowTitle = "TetrisBot v0.9 [Made by Jürgen, Karl and Joosep]";
 	private TetrisBotMain main;
+	private boolean AIActivated = false;
 	
 	
 	public TetrisBotGUIPanel(TetrisBotMain main) {
@@ -34,6 +35,10 @@ public class TetrisBotGUIPanel extends JPanel{
 	
 	public void setLocationRectangle(Rectangle rectangle){
 		locationRectangle = rectangle;
+	}
+	
+	public boolean isAIActivated(){
+		return AIActivated;
 	}
 	
 	@Override
@@ -92,7 +97,7 @@ public class TetrisBotGUIPanel extends JPanel{
             g2d.drawString("Color at (" + mx + ";" + my + "): (" + c.getRed() + "; " + c.getGreen() + "; " + c.getBlue() + ")", sidebarX, 70);
             g2d.drawString("Color at (" + (mx - locationRectangle.x) + ";" + (my-locationRectangle.y) + "): (" + c.getRed() + "; " + c.getGreen() + "; " + c.getBlue() + ")", sidebarX, 100);
             g2d.drawString("Status: " + statusMessage, sidebarX, 130);
-            g2d.drawString("AI: Stopped", sidebarX, 160);
+            g2d.drawString("AI: " + (AIActivated?"activated!" : "stopped!"), sidebarX, 160);
             
             g2d.setColor(Color.WHITE);
             //draw debug information
@@ -122,6 +127,9 @@ public class TetrisBotGUIPanel extends JPanel{
 		if(locationRectangle != null  &&  y > 40 && y < 80 && x > TetrisBotGUI.LEFT_SIDEBAR_WIDTH + TetrisBotGUI.RIGHT_SIDEBAR_WIDTH + locationRectangle.width - 40){
 			main.rec.analyzeGameState();
 		}
+		
+		if(locationRectangle != null  &&  y > 140 && y < 170 && x > TetrisBotGUI.LEFT_SIDEBAR_WIDTH + locationRectangle.width){
+			AIActivated = !AIActivated;
+		}
 	}
-	
 }

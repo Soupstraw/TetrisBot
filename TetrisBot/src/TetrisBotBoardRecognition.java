@@ -5,6 +5,11 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 
+import game.GameBoard;
+import game.tetromino.Tetromino;
+import game.tetromino.TetrominoBuilder;
+import game.tetromino.TetrominoBuilder.TetrominoShape;
+
 public class TetrisBotBoardRecognition {
 	
 	int board[][] = new int[10][20];
@@ -33,6 +38,9 @@ public class TetrisBotBoardRecognition {
 	private Rectangle gameWindow;
 	private Robot robot;
 	private GameState currentGameState = GameState.UNKNOWN;
+	
+	private GameBoard decodedGameBoard = new GameBoard();
+	private Tetromino decodedTetromino = TetrominoBuilder.buildTetromino(TetrominoShape.T_2x2);
 	
 	public TetrisBotBoardRecognition(Rectangle gameWindow) {
 		this.gameWindow = gameWindow;
@@ -74,7 +82,7 @@ public class TetrisBotBoardRecognition {
         		int xpos = 92 + 9 + x*18;
         		int ypos = 152 + 10 + y*18;
         		
-        		board[x][y] = game.getRGB(xpos, ypos);
+          		board [x][y] = game.getRGB(xpos, ypos);
         	}
         }
 		
@@ -141,11 +149,81 @@ public class TetrisBotBoardRecognition {
 	        		}
 	        	}
 	        }
+			decodeBoardAndTetromino();
+			if(undefined > 2*10){
+				//Over 10% of blocks are not recognized, probably in an unknown state
+				currentGameState = GameState.UNKNOWN;
+			}
 		}
-		if(undefined > 2*10){
-			//Over 10% of blocks are not recognized, probably in an unknown state
-			currentGameState = GameState.UNKNOWN;
+	}
+	
+	/** Extracts the tetromino from the board */
+	private void decodeBoardAndTetromino(){
+		GameBoard gb = new GameBoard();
+		int[][] brd = getBoardData();
+		
+		int highestBlockY = gb.getHeight()-1;
+		boolean emptyLineFound = false;
+		for(int y = gb.getHeight()-1; y >= 0; y--){
+			int blocks = 0;
+			for(int x = 0; x < gb.getWidth(); x++){
+				boolean value = (brd[x][y] > 10  &&  brd[x][y] < 18)  &&  !emptyLineFound;
+				gb.setBlock(x, y, value);
+				if(brd[x][y] > 0){ //if any block exists, concrete included
+					blocks++;
+				}
+			}
+			if(!emptyLineFound){
+				highestBlockY = y;
+			}
+			//System.out.println("Blocks on line " + y + " is " + blocks);
+			if(blocks == 0){
+				emptyLineFound = true;
+			}
 		}
+		//System.out.println("GameBoard decoded: \n" + gb.toString());
+		decodedGameBoard = gb;
+		Tetromino plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_2x2);
+		for(int y = highestBlockY-1; y >= 0; y--){
+			for(int x = 0; x < gb.getWidth(); x++){
+				boolean value = (brd[x][y] > 10  &&  brd[x][y] < 18);
+				if(value){
+					switch(brd[x][y]){
+					case 11:
+						plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_S);
+						break;
+					case 12:
+						plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_2x2);
+						break;
+					case 13:
+						plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_L);
+						break;
+					case 14:
+						plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_Z);
+						break;
+					case 15:
+						plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_T);
+						break;
+					case 16:
+						plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_4x1);
+						break;
+					case 17:
+						plokk = TetrominoBuilder.buildTetromino(TetrominoShape.T_J);
+						break;
+					
+					}
+				}
+			}
+		}
+		decodedTetromino = plokk;
+	}
+	
+	public GameBoard getGameBoard(){
+		return decodedGameBoard;
+	}
+	
+	public Tetromino getTetromino(){
+		return decodedTetromino;
 	}
 	
 	public void drawDebugInformation(Graphics2D g2d){
@@ -156,7 +234,7 @@ public class TetrisBotBoardRecognition {
 		for(int x = 0; x < 10; x++){
 			for(int y = 0; y < 20; y++){
 				g2d.setColor( new Color(board[x][y]) );
-				g2d.fillRect(x*10 + gameWindow.width + 50, y*10+400, 10, 10);
+				g2d.fillRect(x*10 + gameWindow.width + 50, y*10+250, 10, 10);
 			}
 		}
 		
@@ -169,7 +247,7 @@ public class TetrisBotBoardRecognition {
 				}else if(decodedBoard[x][y] == 0){
 					g2d.setColor( new Color(50, 50, 50) );
 					//background
-				}else if(decodedBoard[x][y] == 1){
+				}else if(decodedBoard[x][y] > 10  &&  decodedBoard[x][y] < 18){
 					g2d.setColor( Color.GREEN );
 					//block
 				}else if(decodedBoard[x][y] == 2){
@@ -179,15 +257,47 @@ public class TetrisBotBoardRecognition {
 					g2d.setColor( Color.CYAN );
 					//bomb
 				}
-				g2d.fillRect(x*10 + gameWindow.width + 170, y*10+400, 10, 10);
+				g2d.fillRect(x*10 + gameWindow.width + 170, y*10+250, 10, 10);
 			}
 		}
 		
+		//Draw the board out of final data (the GameBoard itself)
+		for(int x = 0; x < 10; x++){
+			for(int y = 0; y < 20; y++){
+				if(getGameBoard().getBlock(x, y)){
+					g2d.setColor( Color.GREEN );
+					//there is a block
+				}else{
+					g2d.setColor( new Color(50, 50, 50) );
+					//background
+				}
+				g2d.fillRect(x*10 + gameWindow.width + 50, y*10+530, 10, 10);
+			}
+		}
+		
+		//Draw the tetromino
+		for(int x = 0; x < getTetromino().getWidth(); x++){
+			for(int y = 0; y < getTetromino().getHeight(); y++){
+				if(getTetromino().getBlock(x, y)==1){
+					g2d.setColor( Color.CYAN );
+					//there is a block
+				}else{
+					g2d.setColor( new Color(50, 50, 50) );
+					//background
+				}
+				g2d.fillRect((x + getTetromino().getX())*10 + gameWindow.width + 50, (y + getTetromino().getY())*10+530, 10, 10);
+			}
+		}
+				
 		//Draw labels
 		int sidebarX = TetrisBotGUI.LEFT_SIDEBAR_WIDTH + gameWindow.width + 10;
         g2d.setColor( Color.BLACK );
 		g2d.drawString("State: " + currentGameState.toString(), sidebarX, 190);
-		g2d.drawString("Raw data", gameWindow.width + 70, 395);
-		g2d.drawString("processed", gameWindow.width + 189, 395);
-	}
+ 		g2d.drawString("Raw data", gameWindow.width + 70, 245);
+		g2d.drawString("processed", gameWindow.width + 189, 245);
+		
+		g2d.drawString("GameBoard:", gameWindow.width + 60, 495);
+		//g2d.drawString("Tetromino:", gameWindow.width + 180, 495);
+		
+ 	}
 }
