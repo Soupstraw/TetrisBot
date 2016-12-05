@@ -21,10 +21,10 @@ public class TetrominoBuilder {
         switch (shape) {
             case T_4x1:
                 return new Tetromino(new int[][]{
-                        {1},				// The shape of a spawned block, make sure it is spawned with the right rotation
-                        {1},
-                        {1},
-                        {1}
+                        {0, 1, 0, 0},				// The shape of a spawned block, make sure it is spawned with the right rotation
+                        {0, 1, 0, 0},
+                        {0, 1, 0, 0},
+                        {0, 1, 0, 0}
                 },
                 3,				// The coordinates of a spawned block
                 0				// Use trial-and error to find the coordinates that match game spawns
@@ -39,45 +39,45 @@ public class TetrominoBuilder {
                 );
             case T_S:
                 return new Tetromino(new int[][]{
-                        {0, 1},
-                        {1, 1},
-                        {1, 0}
+                        {0, 1, 0},
+                        {1, 1, 0},
+                        {1, 0, 0}
                 },
                 3,
                 -1
                 );
             case T_Z:
                 return new Tetromino(new int[][]{
-                        {1, 0},
-                        {1, 1},
-                        {0, 1}
+                        {1, 0, 0},
+                        {1, 1, 0},
+                        {0, 1, 0}
                 },
                 3,
                 -1
                 );
             case T_L:
                 return new Tetromino(new int[][]{
-                        {0, 1},
-                        {0, 1},
-                        {1, 1}
+                        {0, 1, 0},
+                        {0, 1, 0},
+                        {1, 1, 0}
                 },
                 3,
                 -1
                 );
             case T_J:
                 return new Tetromino(new int[][]{
-                        {1, 1},
-                        {0, 1},
-                        {0, 1}
+                        {1, 1, 0},
+                        {0, 1, 0},
+                        {0, 1, 0}
                 },
                 3,
                 -1
                 );
             case T_T:
                 return new Tetromino(new int[][]{
-                        {0, 1},
-                        {1, 1},
-                        {0, 1}
+                        {0, 1, 0},
+                        {1, 1, 0},
+                        {0, 1, 0}
                 },
                 3,
                 -1

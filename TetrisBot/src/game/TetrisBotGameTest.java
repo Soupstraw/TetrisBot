@@ -9,17 +9,18 @@ import game.tetromino.TetrominoBuilder;
 public class TetrisBotGameTest {
     public static void main(String[] args){
 
-    	TetrisBotGameState gameState = new TetrisBotGameState();
-    	
-        TetrominoBuilder tb = new TetrominoBuilder();
+    	//TetrisBotGameState gameState = new TetrisBotGameState();
 
-        Tetromino t = tb.buildTetromino(TetrominoBuilder.TetrominoShape.T_2x2);	// Change the parameter to test for different tetrominos
-        System.out.println(t);
-
-        // Test rotation
-        t.rotateClockwise();
-        System.out.println(t);
+        for(TetrominoBuilder.TetrominoShape shape : TetrominoBuilder.TetrominoShape.values()){
+	        Tetromino t = TetrominoBuilder.buildTetromino(shape);	// Change the parameter to test for different tetrominos
+	        System.out.println(t);
+	
+	        // Test rotation
+	        t.rotateClockwise();
+	        System.out.println(t);
+        }
         
+        /*
         // Check collision
         System.out.println(gameState.getBoard().checkTetrominoCollision(t));
         
@@ -38,5 +39,6 @@ public class TetrisBotGameTest {
         gameState.getBoard().fastDrop(t);
         gameState.getBoard().freezeTetromino(t);
         System.out.println(gameState.getBoard());
+        */
     }
 }
