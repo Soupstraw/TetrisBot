@@ -37,40 +37,47 @@ public class TetrisBotMain {
 			gui.setLocationRectangle(game);
 		}
 		
+		
+		TetrisBotGameState gameState = new TetrisBotGameState();
+		TetrisBotRobot robot = new TetrisBotRobot();
+		
+		//this infinite loop is automatically exited when the JWindow is closed
+		while(true){
+			gui.panel.setStatusMessage("Analüüsin...");
+			rec.analyzeGameState();
+			gui.repaint();
+			if(rec.getGameState() == TetrisBotBoardRecognition.GameState.GAME_ONGOING){
+				GameBoard gb = rec.getGameBoard();
+				Tetromino plokk = rec.getTetromino();
+				
+				//System.out.println("GameBoard: " + gb);
+				//System.out.println("Plokk: " + plokk);
+				
+				gameState.setBoard(gb);
+				gameState.setCurrentTetromino(plokk);
+				
+				ArrayList<BotCommand> commands = gameState.findBestMove();
+				if(commands != null)
+					gui.panel.setStatusMessage(commands.toString());
+				
+				if(gui.panel.isAIActivated()){
+					gui.panel.setStatusMessage("Liigutan plokki ...");
+					System.out.println(commands);
+					for(BotCommand c : commands){
+						robot.doCommand(c);
+					}
+					gui.panel.setStatusMessage("Käigud tehtud!");
+				}
+			}
+			try {Thread.sleep(RandomDelayTimeGenerator.generate(200, 300));} catch (InterruptedException e) {e.printStackTrace();}
+		}
+		
+		
+		/*
 		new Thread(){
 			public void run() {
-				TetrisBotGameState gameState = new TetrisBotGameState();
-				TetrisBotRobot robot = new TetrisBotRobot();
 				
-				//this infinite loop is automatically exited when the JWindow is closed
-				while(true){
-					gui.panel.setStatusMessage("Analüüsin " + System.currentTimeMillis()%1000);
-					rec.analyzeGameState();
-					gui.repaint();
-					if(rec.getGameState() == TetrisBotBoardRecognition.GameState.GAME_ONGOING){
-						GameBoard gb = rec.getGameBoard();
-						Tetromino plokk = rec.getTetromino();
-						
-						//System.out.println("GameBoard: " + gb);
-						//System.out.println("Plokk: " + plokk);
-						
-						gameState.setBoard(gb);
-						gameState.setCurrentTetromino(plokk);
-						
-						ArrayList<BotCommand> commands = gameState.findBestMove();
-						gui.panel.setStatusMessage(commands.toString());
-						
-						if(gui.panel.isAIActivated()){
-							System.out.println(commands);
-							for(BotCommand c : commands){
-								robot.doCommand(c);
-							}
-							gui.panel.setStatusMessage("Ended: " + commands);
-						}
-					}
-					try {sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
-				}
 			};
-		}.start();
+		}.start();*/
 	}
 }

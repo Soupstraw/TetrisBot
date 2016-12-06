@@ -19,11 +19,11 @@ public class TetrisBotRobot {
 		System.out.println("KeyEvent: " + keyEvent);
 		robot.keyPress(keyEvent);
 		try{
-			Thread.sleep(50);
+			Thread.sleep(RandomDelayTimeGenerator.generate(80, 200));
 		} catch (InterruptedException e) {}
 		robot.keyRelease(keyEvent);
 		try{
-			Thread.sleep(250);
+			Thread.sleep(RandomDelayTimeGenerator.generate(90, 300));
 		} catch (InterruptedException e) {}
 	}
 	
@@ -56,6 +56,8 @@ public class TetrisBotRobot {
 			break;
 		case FAST_DROP:
 			drop();
+			break;
+		default:
 			break;
 		}
 	}
